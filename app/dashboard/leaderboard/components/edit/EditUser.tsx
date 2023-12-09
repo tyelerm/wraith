@@ -1,21 +1,21 @@
 import React from "react";
-import DailogForm from "./DialogForm";
+import DailogForm from "../DialogForm";
 import { Button } from "@/components/ui/button";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import UserForm from "./TodoForm";
+import EditForm from "./EditorForm";
 
-export default function EditTodo() {
+export default function EditUser() {
     return (
         <DailogForm
             id="update-trigger"
-            title="Edit Todo"
+            title="Edit User"
             Trigger={
                 <Button variant="outline">
                     <Pencil1Icon />
                     Edit
                 </Button>
             }
-            form={<UserForm isEdit={true} />}
+            form={<EditForm />}
         />
     );
 }

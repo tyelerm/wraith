@@ -1,18 +1,18 @@
 import React from "react";
-import MemberTable from "./components/MemberTable";
+import UserTable from "./components/UserTable";
 
-import SearchMembers from "./components/SearchMembers";
-import CreateMember from "./components/create/CreateMember";
+import SearchUser from "./components/SearchUsers";
+import CreateUser from "./components/create/CreateUser";
 
-export default function Members() {
-	return (
-		<div className="space-y-5 w-full overflow-y-auto px-3">
-			<h1 className="text-3xl font-bold">Leaderboard</h1>
-			<div className="flex gap-2">
-				<SearchMembers />
-				<CreateMember />
-			</div>
-			<MemberTable />
-		</div>
-	);
+export default function Users() {
+    return (
+        <div className="w-full max-w-[1400px] m-auto px-3 space-y-5 overflow-y-auto">
+            <h1 className="text-3xl font-bold">Leaderboard</h1>
+            <div className="flex gap-2">
+                <SearchUser />
+                <CreateUser />
+            </div>
+            <UserTable />
+        </div>
+    );
 }
