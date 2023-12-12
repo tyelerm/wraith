@@ -8,7 +8,6 @@ export const randomUsers = (count: number) => {
 
     while (users.length < count) {
         users.push({
-            rank: users.length + 1,
             address: randomAddress(),
             wraith_points: randomPoints(),
             active_boost: "boost",

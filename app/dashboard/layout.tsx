@@ -12,13 +12,13 @@ export default async function Layout({ children }: { children: ReactNode }) {
         return redirect("/auth");
     }
     return (
-        <div className="flex w-full ">
-            <div className="flex flex-col h-screen">
+        <div className="flex w-full">
+            <div className="flex flex-col h-screen max-h-screen">
                 <SideNav />
                 <MobileSideNav />
             </div>
 
-            <div className="w-full p-5 space-y-5 bg-gray-100 sm:flex-1 sm:p-10 dark:bg-inherit">
+            <div className="flex flex-col w-full h-screen max-h-screen overflow-hidden bg-gray-100 dark:bg-inherit">
                 <ToggleSidebar />
                 {children}
             </div>
