@@ -1,0 +1,51 @@
+{
+    "0": {
+        "name": "Bridge 0.01 ETH",
+        "description": "For every 0.01 ETH you bridge to Wraith, you get 10 points an hour",
+        "points": 10,
+        "unit": "hour",
+        "duration": 1
+    },
+    "1": {
+        "name": "Bridge 10 MATIC",
+        "description": "For every 10 MATIC you bridge to Wraith, you get 100 points a day",
+        "points": 100,
+        "unit": "day",
+        "duration": 1
+    },
+    "2": {
+        "name": "Bridge 1 SOL",
+        "description": "For every 1 SOL you bridge to Wraith, you get 2000 points every 2 weeks",
+        "points": 100,
+        "unit": "week",
+        "duration": 2
+    },
+    "3": {
+        "name": "Point Task",
+        "description": "Task Description: this is what you have to do to complete the task and earn wraith points. Task Description: this is what you have to do to complete the task and earn wraith points. Task Description: this is what you have to do to complete the task and earn wraith points. Task Description: this is what you have to do to complete the task and earn wraith points. Task Description: this is what you have to do to complete the task and earn wraith points.",
+        "points": 10,
+        "unit": "hour",
+        "duration": 1
+    },
+    "4": {
+        "name": "Point Task",
+        "description": "Task Description: this is what you have to do to complete the task and earn wraith points.",
+        "points": 10,
+        "unit": "hour",
+        "duration": 12
+    },
+    "5": {
+        "name": "Point Task",
+        "description": "Task Description: this is what you have to do to complete the task and earn wraith points.",
+        "points": 10,
+        "unit": "week",
+        "duration": 1
+    },
+    "6": {
+        "name": "Point Task",
+        "description": "Task Description: this is what you have to do to complete the task and earn wraith points.",
+        "points": 10,
+        "unit": "month",
+        "duration": 1
+    }
+}
