@@ -6,9 +6,12 @@ import {
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
+    CoinbaseWalletAdapter,
     PhantomWalletAdapter,
-    UnsafeBurnerWalletAdapter,
+    TrustWalletAdapter,
+    WalletConnectWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
+
 import { clusterApiUrl } from "@solana/web3.js";
 import React, { useMemo } from "react";
 import { ReactNode } from "react";
@@ -28,7 +31,18 @@ export default function SolanaWalletAdapterProvider({
     const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
     const wallets = useMemo(
-        () => [new PhantomWalletAdapter(), new UnsafeBurnerWalletAdapter()],
+        () => [
+            // new PhantomWalletAdapter(),
+            new CoinbaseWalletAdapter(),
+            new TrustWalletAdapter(),
+            new WalletConnectWalletAdapter({
+                network,
+                options: {
+                    relayUrl: "wss://relay.walletconnect.com",
+                    projectId: "564f4b5f96482369d97247291e29eab3",
+                },
+            }),
+        ],
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [network]
     );

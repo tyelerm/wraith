@@ -68,9 +68,8 @@ export default function Faucet() {
             <div className="p-6 min-w-[300px] max-w-[500px] bg-[radial-gradient(112%_89.55%_at_50%_15%,rgba(97,21,245,0.66)_0%,rgba(41,16,63,0.47)_100%)] w-full rounded-xl border border-indigo-500 mt-4 m-auto">
                 <div className="text-[1.5rem] font-medium pb-2">Get Tokens</div>
                 <div className="text-[0.8rem] w-[20rem] text-gray-300 pb-10">
-                    This faucet transfers ETH to a users
-                    address on Wraith's testnet.
-                    Confirm details before submitting
+                    This faucet transfers ETH to a users address on Wraith's
+                    testnet. Confirm details before submitting
                 </div>
 
                 <div>Network</div>
@@ -123,6 +122,35 @@ export default function Faucet() {
                     </div>
                 </div>
 
+                <div>Solana</div>
+                <div className="flex flex-col mb-5">
+                    <WalletMultiButtonDynamic
+                        style={{
+                            width: "100%",
+                            justifyContent: "center",
+                            backgroundColor: "#545df8",
+                        }}
+                    />
+
+                    {/* {isConnected && <WalletDisconnectButtonDynamic />} */}
+                </div>
+
+                <div>EVM, BSC, MATIC</div>
+
+                <div className="flex flex-col gap-3 mb-5">
+                    {connectors.map((connector: any, index: Number) => {
+                        if (index === 1)
+                            connector.name =
+                                "MetaMask (but actually whichever extension injects first)";
+                        return (
+                            <ConnectButton
+                                key={connector.name}
+                                connector={connector}
+                            />
+                        );
+                    })}
+                </div>
+
                 <div className="px-4 p-1 gap-4 mb-5 max-w-[100%] items-center w-full overflow-hidden flex justify-between whitespace-nowrap flex-nowrap text-left select-none bg-[#545df8] rounded-md">
                     Connected to:{" "}
                     <div className="overflow-hidden font-mono text-ellipsis">
@@ -136,36 +164,6 @@ export default function Faucet() {
                         Disconnect
                     </div>
                 </div>
-
-                {!isConnected && (
-                    <>
-                        <div>Solana</div>
-                        <div className="flex flex-col mb-5">
-                            {!isConnected && (
-                                <WalletMultiButtonDynamic
-                                    style={{
-                                        width: "100%",
-                                        justifyContent: "center",
-                                        backgroundColor: "#545df8",
-                                    }}
-                                />
-                            )}
-                            {isConnected && <WalletDisconnectButtonDynamic />}
-                        </div>
-
-                        <div>EVM, BSC, MATIC</div>
-                        <div className="flex flex-col gap-3 mb-5">
-                            {connectors.map((connector: any) => {
-                                return (
-                                    <ConnectButton
-                                        key={connector.name}
-                                        connector={connector}
-                                    />
-                                );
-                            })}
-                        </div>
-                    </>
-                )}
             </div>
         </>
     );
