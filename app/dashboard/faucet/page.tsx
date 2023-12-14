@@ -10,19 +10,46 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import dynamic from "next/dynamic";
 
 const networks = ["Network 1", "Network 2", "Network 3"];
 const tokens = ["Token 1", "Token 2", "Token 3"];
 
+const WalletDisconnectButtonDynamic = dynamic(
+    async () =>
+        (await import("@solana/wallet-adapter-react-ui"))
+            .WalletDisconnectButton,
+    { ssr: false }
+);
+const WalletMultiButtonDynamic = dynamic(
+    async () =>
+        (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
+    { ssr: false }
+);
+
 export default function Faucet() {
+    const { address: _address, isConnected, connector } = useAccount();
+    const [address, setAddress] = useState(undefined as any);
+    const { disconnect } = useDisconnect();
+    const { connectors } = useConnect();
     const [selectedNetwork, setSelectedNetwork] = useState("");
     const [selectedToken, setSelectedToken] = useState("");
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
+        setAddress(_address);
+    }, [_address]);
+
+    useEffect(() => {
         setSelectedNetwork(networks[0]);
         setSelectedToken(tokens[0]);
     }, []);
+
+    useEffect(() => {
+        console.log(connector);
+    }, [connector]);
 
     const selectStyle = (network: string) => {
         return (
@@ -50,6 +77,7 @@ export default function Faucet() {
                 <div className="flex gap-2 p-1 mb-5 bg-indigo-700 rounded-md select-none flex-nowrap">
                     {networks.map((network) => (
                         <div
+                            key={network}
                             onClick={() => setSelectedNetwork(network)}
                             className={cn(selectStyle(network))}
                         >
@@ -72,8 +100,9 @@ export default function Faucet() {
                                 "w-full absolute top-[4px] cursor-pointer translate-x-[-50%] p-2 bg-indigo-700 rounded-md"
                             )}
                         >
-                            {tokens.map((token) => (
+                            {tokens.map((token, index) => (
                                 <DropdownMenuItem
+                                    key={token}
                                     onClick={() => setSelectedToken(token)}
                                     className="p-1 pl-2 rounded-sm hover:bg-indigo-500"
                                 >
@@ -94,10 +123,92 @@ export default function Faucet() {
                     </div>
                 </div>
 
-                <div className="p-3 font-medium text-center select-none bg-[#545df8] hover:bg-[#545cf8b5] rounded-md cursor-pointer">
-                    Connect to get tokens
+                <div className="px-4 p-1 gap-4 mb-5 max-w-[100%] items-center w-full overflow-hidden flex justify-between whitespace-nowrap flex-nowrap text-left select-none bg-[#545df8] rounded-md">
+                    Connected to:{" "}
+                    <div className="overflow-hidden font-mono text-ellipsis">
+                        {!!address &&
+                            address?.slice(0, 6) + "..." + address?.slice(-4)}
+                    </div>
+                    <div
+                        onClick={() => disconnect()}
+                        className="px-3 py-1 bg-indigo-700 rounded-sm cursor-pointer"
+                    >
+                        Disconnect
+                    </div>
                 </div>
+
+                {!isConnected && (
+                    <>
+                        <div>Solana</div>
+                        <div className="flex flex-col mb-5">
+                            {!isConnected && (
+                                <WalletMultiButtonDynamic
+                                    style={{
+                                        width: "100%",
+                                        justifyContent: "center",
+                                        backgroundColor: "#545df8",
+                                    }}
+                                />
+                            )}
+                            {isConnected && <WalletDisconnectButtonDynamic />}
+                        </div>
+
+                        <div>EVM, BSC, MATIC</div>
+                        <div className="flex flex-col gap-3 mb-5">
+                            {connectors.map((connector: any) => {
+                                return (
+                                    <ConnectButton
+                                        key={connector.name}
+                                        connector={connector}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </>
+                )}
             </div>
         </>
     );
 }
+
+export const ConnectButton = ({ connector }: { connector: any }) => {
+    const { connect } = useConnect({ connector });
+    const [name, setName] = useState("");
+    useEffect(() => {
+        setName(connector.name);
+    }, [connector]);
+    return (
+        <div
+            onClick={() => connect()}
+            className="bg-[#545df8] py-3 w-full text-center rounded-sm cursor-pointer"
+        >
+            {name}
+        </div>
+    );
+};
+
+export const TestButton = ({ provider }: { provider: any }) => {
+    const { connect } = useConnect({
+        connector: new InjectedConnector({
+            options: {
+                name: "MetaMask",
+                getProvider: () => {
+                    let provider = undefined;
+                    if (typeof window !== "undefined")
+                        provider = window.ethereum.providers[1];
+                    return provider;
+                },
+            },
+        }),
+        // connector: new MetaMaskConnector({}),
+    });
+
+    return (
+        <div
+            onClick={() => connect()}
+            className="p-3 font-medium text-center select-none bg-[#545df8] hover:bg-[#545cf8b5] rounded-md cursor-pointer mb-5"
+        >
+            Connection Test
+        </div>
+    );
+};
