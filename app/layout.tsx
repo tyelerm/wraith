@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import WagmiProvider from "@/components/wagmi-provider";
 import SolanaWalletAdapterProvider from "@/components/solana-wallet-adapter-provider";
+import { WalletModal } from "@/components/walletModal/walletModal";
 
 const jost = Jost({
     subsets: ["latin"],
@@ -15,23 +16,23 @@ export const metadata: Metadata = {
     metadataBase: new URL("https://daily-todo-task.vercel.app/"),
 
     title: {
-        template: "%s | Daily Todo",
-        default: "Daily Todo",
+        template: "%s | Wraith",
+        default: "Wraith",
     },
     authors: {
-        name: "chensokheng",
+        name: "Tyeler McClard, Jeffrey Hernandez",
     },
     description:
         "Build dashboard with role managemanet using next.js and supabase.",
     openGraph: {
-        title: "Daily Todo",
-        description: "Build dashboard with next.js and supabase ",
-        url: "https://daily-todo-task.vercel.app/",
-        siteName: "Daily Todo",
+        title: "Wraith",
+        description: "A Web3 platform for emitting and bridging Wraith",
+        url: "https://wraith.vercel.app/",
+        siteName: "Wraith",
         images: "/og.png",
         type: "website",
     },
-    keywords: ["daily web coding", "chensokheng", "dailywebcoding"],
+    keywords: ["web3", "faucet", "bridge"],
 };
 
 export default function RootLayout({
@@ -41,6 +42,14 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                <link
+                    rel="icon"
+                    href="/icon?<generated>"
+                    type="image/png"
+                    sizes="32x32"
+                />
+            </head>
             <body className={`${jost.className} antialiased dark:bg-[#09090B]`}>
                 <ThemeProvider
                     attribute="class"
@@ -50,6 +59,7 @@ export default function RootLayout({
                 >
                     <WagmiProvider>
                         <SolanaWalletAdapterProvider>
+                            <WalletModal />
                             <main className="">{children}</main>
                             <Toaster />
                         </SolanaWalletAdapterProvider>

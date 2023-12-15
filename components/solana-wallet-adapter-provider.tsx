@@ -32,9 +32,9 @@ export default function SolanaWalletAdapterProvider({
 
     const wallets = useMemo(
         () => [
-            // new PhantomWalletAdapter(),
-            // new CoinbaseWalletAdapter(),
-            // new TrustWalletAdapter(),
+            new PhantomWalletAdapter(),
+            new CoinbaseWalletAdapter(),
+            new TrustWalletAdapter(),
             new WalletConnectWalletAdapter({
                 network,
                 options: {
