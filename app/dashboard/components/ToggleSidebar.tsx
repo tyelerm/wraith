@@ -6,7 +6,7 @@ export default function ToggleSidebar() {
     return (
         <Button
             variant="outline"
-            className="block mt-1 ml-2 lg:hidden w-fit"
+            className="block lg:hidden w-fit"
             onClick={() => document.getElementById("toggle-sidebar")?.click()}
         >
             <HamburgerMenuIcon />

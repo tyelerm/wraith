@@ -15,7 +15,7 @@ export const ConnectWallet = () => {
     return (
         <div
             onClick={() => toggleWalletModal()}
-            className="absolute right-[8px] top-[4px] px-4 py-2 ml-auto font-medium bg-indigo-700 rounded-lg cursor-pointer select-none w-fit"
+            className="px-4 py-[6px] ml-auto font-medium bg-indigo-700 rounded-lg cursor-pointer select-none whitespace-nowrap w-fit"
         >
             Connect Wallet
         </div>

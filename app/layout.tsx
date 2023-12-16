@@ -1,3 +1,4 @@
+"use client";
 import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 import "./globals.css";
@@ -6,34 +7,35 @@ import { Toaster } from "@/components/ui/toaster";
 import WagmiProvider from "@/components/wagmi-provider";
 import SolanaWalletAdapterProvider from "@/components/solana-wallet-adapter-provider";
 import { WalletModal } from "@/components/walletModal/walletModal";
+import { SessionProvider } from "next-auth/react";
 
 const jost = Jost({
     subsets: ["latin"],
     weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export const metadata: Metadata = {
-    metadataBase: new URL("https://daily-todo-task.vercel.app/"),
+// export const metadata: Metadata = {
+//     metadataBase: new URL("https://daily-todo-task.vercel.app/"),
 
-    title: {
-        template: "%s | Wraith",
-        default: "Wraith",
-    },
-    authors: {
-        name: "Tyeler McClard, Jeffrey Hernandez",
-    },
-    description:
-        "Build dashboard with role managemanet using next.js and supabase.",
-    openGraph: {
-        title: "Wraith",
-        description: "A Web3 platform for emitting and bridging Wraith",
-        url: "https://wraith.vercel.app/",
-        siteName: "Wraith",
-        images: "/og.png",
-        type: "website",
-    },
-    keywords: ["web3", "faucet", "bridge"],
-};
+//     title: {
+//         template: "%s | Wraith",
+//         default: "Wraith",
+//     },
+//     authors: {
+//         name: "Tyeler McClard, Jeffrey Hernandez",
+//     },
+//     description:
+//         "Build dashboard with role managemanet using next.js and supabase.",
+//     openGraph: {
+//         title: "Wraith",
+//         description: "A Web3 platform for emitting and bridging Wraith",
+//         url: "https://wraith.vercel.app/",
+//         siteName: "Wraith",
+//         images: "/og.png",
+//         type: "website",
+//     },
+//     keywords: ["web3", "faucet", "bridge"],
+// };
 
 export default function RootLayout({
     children,
@@ -57,13 +59,15 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <WagmiProvider>
-                        <SolanaWalletAdapterProvider>
-                            <WalletModal />
-                            <main className="">{children}</main>
-                            <Toaster />
-                        </SolanaWalletAdapterProvider>
-                    </WagmiProvider>
+                    <SessionProvider>
+                        <WagmiProvider>
+                            <SolanaWalletAdapterProvider>
+                                <WalletModal />
+                                <main className="">{children}</main>
+                                <Toaster />
+                            </SolanaWalletAdapterProvider>
+                        </WagmiProvider>
+                    </SessionProvider>
                 </ThemeProvider>
             </body>
         </html>

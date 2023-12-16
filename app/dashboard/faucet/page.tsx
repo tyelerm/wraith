@@ -35,11 +35,11 @@ export default function Faucet() {
     };
 
     return (
-        <>
-            <h1 className="pt-2 pl-4 text-3xl font-bold">Faucet</h1>
+        <div className="mr-2 md:mr-4">
+            <h1 className="text-3xl font-bold">Faucet</h1>
             <div className="p-6 min-w-[300px] max-w-[500px] bg-[radial-gradient(112%_89.55%_at_50%_15%,rgba(97,21,245,0.66)_0%,rgba(41,16,63,0.47)_100%)] w-full rounded-xl border border-indigo-500 mt-4 m-auto">
                 <div className="text-[1.5rem] font-medium pb-2">Get Tokens</div>
-                <div className="text-[0.8rem] w-[20rem] text-gray-300 pb-10">
+                <div className="text-[0.8rem] max-w-[20rem] text-gray-300 pb-10">
                     This faucet transfers ETH to a users address on Wraith's
                     testnet. Confirm details before submitting
                 </div>
@@ -94,6 +94,6 @@ export default function Faucet() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
