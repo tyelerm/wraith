@@ -1,5 +1,4 @@
 "use client";
-import { TwitterLogoIcon } from "@radix-ui/react-icons";
 import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -23,7 +22,6 @@ export const ConnectTwitter = () => {
                 >
                     <div className="flex items-center justify-between flex-nowrap whitespace-nowrap">
                         Connect X
-                        {/* <TwitterLogoIcon width={24} height={24} /> */}
                         <Image src={logo} alt="x" height={24} width={24} />
                     </div>
                 </button>
@@ -39,6 +37,17 @@ export const ConnectTwitter = () => {
                                 alt="profile-img"
                             />
                         )}
+                        {!session.user?.image && (
+                            <div className="flex justify-center w-16 h-16 bg-black rounded-full">
+                                <Image
+                                    src={logo}
+                                    alt="x"
+                                    height={32}
+                                    width={32}
+                                />
+                            </div>
+                        )}
+
                         <div className="flex flex-col justify-center whitespace-nowrap">
                             <div className="flex">{session.user.name}</div>
                             <div className="flex">{session.user.email}</div>
@@ -46,7 +55,6 @@ export const ConnectTwitter = () => {
                     </div>
 
                     <div className="absolute ml-auto right-[8px]">
-                        {/* <TwitterLogoIcon width={24} height={24} /> */}
                         <Image src={logo} alt="x" height={20} width={20} />
                     </div>
                     <div className="flex flex-col items-end justify-end ml-auto">
