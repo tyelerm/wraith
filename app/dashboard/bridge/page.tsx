@@ -66,12 +66,12 @@ export default function Bridge() {
             >
                 <div className="flex flex-col overflow-hidden border border-indigo-800 rounded-xl bg-indigo-950">
                     <div className="flex justify-between">
-                        <div className="p-2 select-none">
+                        <div className="p-2 select-none whitespace-nowrap">
                             <div className="text-gray-500">From</div>
                             <DropdownMenu
                                 onOpenChange={(e) => handleOpenChange(e)}
                             >
-                                <DropdownMenuTrigger className="flex items-center max-w-[140px] px-2 py-1 bg-indigo-700 rounded-lg w-[120px]">
+                                <DropdownMenuTrigger className="flex items-center max-w-[140px] px-2 py-1 bg-indigo-700 rounded-lg w-[140px]">
                                     <div className="w-full">
                                         {sourceNetwork}
                                     </div>
@@ -110,11 +110,11 @@ export default function Bridge() {
                         </div>
                     </div>
                     <div className="flex justify-between border-t border-t-indigo-800">
-                        <div className="flex items-center select-none">
+                        <div className="flex items-center select-none whitespace-nowrap">
                             <DropdownMenu
                                 onOpenChange={(e) => handleOpenChange(e)}
                             >
-                                <DropdownMenuTrigger className="flex text-[1.2rem] items-center max-w-[140px] px-2 py-1 border-r border-r-indigo-800 w-[120px] h-full">
+                                <DropdownMenuTrigger className="flex text-[1.2rem] items-center max-w-[140px] px-2 py-1 border-r border-r-indigo-800 w-[140px] h-full">
                                     <div className="w-full">
                                         {selectedToken}
                                     </div>
@@ -165,10 +165,10 @@ export default function Bridge() {
                 </button>
 
                 <div className="flex justify-between mt-4 overflow-hidden border border-indigo-800 rounded-xl bg-indigo-950">
-                    <div className="p-2 ">
+                    <div className="p-2 whitespace-nowrap">
                         <div className="text-gray-500">To</div>
                         <DropdownMenu onOpenChange={(e) => handleOpenChange(e)}>
-                            <DropdownMenuTrigger className="flex items-center max-w-[140px] px-2 py-1 bg-indigo-700 rounded-lg w-[120px]">
+                            <DropdownMenuTrigger className="flex items-center max-w-[140px] px-2 py-1 bg-indigo-700 rounded-lg w-[140px]">
                                 <div className="w-full">
                                     {destinationNetwork}
                                 </div>
