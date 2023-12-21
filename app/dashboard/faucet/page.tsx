@@ -45,9 +45,13 @@ export default function Faucet() {
                 </div>
 
                 <div>Network</div>
-                <div className="flex gap-2 p-1 mb-5 bg-indigo-700 rounded-md select-none flex-nowrap">
-                    {networks.map((network) => (
+                <div
+                    tabIndex={0}
+                    className="flex gap-2 p-1 mb-5 bg-indigo-700 rounded-md select-none flex-nowrap"
+                >
+                    {networks.map((network, index) => (
                         <div
+                            tabIndex={index}
                             key={network}
                             onClick={() => setSelectedNetwork(network)}
                             className={cn(selectStyle(network))}
@@ -85,7 +89,10 @@ export default function Faucet() {
                 </div>
 
                 <div>Wallet Address</div>
-                <div className="flex justify-between p-3 mb-16 bg-indigo-700 rounded-md select-none flex-nowrap">
+                <div
+                    tabIndex={0}
+                    className="flex justify-between p-3 mb-16 bg-indigo-700 rounded-md select-none flex-nowrap"
+                >
                     <div className="font-mono text-[#999999] overflow-hidden text-ellipsis">
                         0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
                     </div>

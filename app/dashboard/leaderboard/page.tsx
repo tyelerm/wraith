@@ -6,13 +6,17 @@ import CreateUser from "./components/create/CreateUser";
 
 export default function Users() {
     return (
-        <div className="w-full max-w-[1400px] ml-auto mr-auto pr-2 md:pr-4 pb-4 space-y-5 overflow-y-auto">
+        <>
             <h1 className="text-3xl font-bold">Leaderboard</h1>
-            <div className="flex gap-2">
-                <SearchUser />
-                <CreateUser />
+            <div className="w-full py-4 pr-2 overflow-y-auto md:pr-4">
+                <div className="flex gap-2 max-w-[1400px] mx-auto pb-4">
+                    <SearchUser />
+                    <CreateUser />
+                </div>
+                <div className="flex justify-center w-full overflow-x-hidden">
+                    <UserTable />
+                </div>
             </div>
-            <UserTable />
-        </div>
+        </>
     );
 }

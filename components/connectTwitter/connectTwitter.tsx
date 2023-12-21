@@ -1,6 +1,5 @@
 "use client";
-import { signIn, signOut } from "next-auth/react";
-import { useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect } from "react";
 import logo from "/public/icons/x-logo/logo.svg";
@@ -10,7 +9,8 @@ export const ConnectTwitter = () => {
     const handleSignIn = () => signIn("twitter");
 
     useEffect(() => {
-        console.log("Session: ", session);
+        if (!session) return;
+        console.log("Sessionn: ", (session as any).profile);
     }, [session]);
 
     return (
@@ -50,7 +50,9 @@ export const ConnectTwitter = () => {
 
                         <div className="flex flex-col justify-center whitespace-nowrap">
                             <div className="flex">{session.user.name}</div>
-                            <div className="flex">{session.user.email}</div>
+                            <div className="flex">
+                                @{(session as any).profile.data.username}
+                            </div>
                         </div>
                     </div>
 

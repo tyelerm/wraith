@@ -113,11 +113,11 @@ export const WalletModal = () => {
                             connector.name =
                                 "MetaMask (but actually whichever extension injects first)";
                         return (
-                            <div onClick={() => toggleWalletModal()}>
-                                <ConnectButton
-                                    key={connector.name}
-                                    connector={connector}
-                                />
+                            <div
+                                key={connector.name}
+                                onClick={() => toggleWalletModal()}
+                            >
+                                <ConnectButton connector={connector} />
                             </div>
                         );
                     })}

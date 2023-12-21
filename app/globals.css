@@ -113,3 +113,25 @@ a:link {
         @apply bg-background text-foreground;
     }
 }
+
+/* remove any possible default button style */
+button {
+    background: none;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    outline: inherit;
+    transition: filter 0.2s ease-out;
+}
+
+button:hover {
+    /* Add hover styles */
+    filter: brightness(1.2);
+}
+
+button:active {
+    /* Add active (pressed) styles */
+    filter: brightness(0.8);
+}

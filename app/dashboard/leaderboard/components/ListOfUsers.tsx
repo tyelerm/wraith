@@ -11,7 +11,7 @@ export default function ListOfUsers() {
 
     useEffect(() => {
         let rank = 1;
-        let _users = randomUsers(8)
+        let _users = randomUsers(15)
             .sort((a: any, b: any) => b.wraith_points - a.wraith_points)
             .map((user: any) => (user = { ...user, rank: rank++ }));
         setUsers(_users);

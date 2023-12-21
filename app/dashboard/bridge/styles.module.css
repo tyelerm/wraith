@@ -1,3 +1,11 @@
+.bgRadialGradient {
+    background-image: radial-gradient(
+        76.33% 76.59% at 50.15% 6.06%,
+        #4a1088 0%,
+        rgba(33, 4, 59, 0.702) 100%
+    );
+}
+
 .DropdownMenuContent {
     width: var(--radix-dropdown-menu-trigger-width);
     max-height: var(--radix-dropdown-menu-content-available-height);
