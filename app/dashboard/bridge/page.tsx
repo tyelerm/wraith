@@ -12,27 +12,48 @@ import {
     TriangleDownIcon,
     TriangleRightIcon,
 } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { AmountInput } from "./amountInput/amountInput";
+import BigNumber from "bignumber.js";
+import { TOKEN_DISPLAY_PRECISION } from "@/lib/constants";
 
-const networks = ["Network 1", "Network 2", "Network 3", "Network 4"];
+const networks = ["Sepolia ETH", "Wraith Testnet"];
 const tokens = ["Token 1", "Token 2", "Token 3", "Token 4"];
 
 export default function Bridge() {
-    const [balance, setBalance] = useState(12.3456789);
+    const [balance, setBalance] = useState<BigNumber>(
+        BigNumber(1234567891234567891)
+    );
     const [destinationBalance, setDesitnationBalance] = useState(1.234);
     const [sourceNetwork, setSourceNetwork] = useState(networks[0]);
-    const [destinationNetwork, setDestinationNetwork] = useState(networks[0]);
-    const [amountToBridge, setAmountToBridge] = useState(0.0);
+    const [destinationNetwork, setDestinationNetwork] = useState(networks[1]);
+    const [amountToBridge, setAmountToBridge] = useState<BigNumber>();
     const [selectedToken, setSelectedToken] = useState(tokens[0]);
+    const [inputError, setInputError] = useState<string>();
     const [isOpen, setIsOpen] = useState(false);
+
     const handleOpenChange = (open: boolean) => {
         setIsOpen(open);
     };
 
-    useEffect(() => {
-        console.log("isOpen: ", isOpen);
-    }, [isOpen]);
+    const onAmountInputChange = ({
+        amount,
+        error,
+    }: {
+        amount?: BigNumber;
+        error?: string;
+    }) => {
+        setAmountToBridge(amount);
+        setInputError(error);
+    };
+
+    const reverseSwapTargets = () => {
+        let srcNet = sourceNetwork;
+        let dstNet = destinationNetwork;
+        setSourceNetwork(dstNet);
+        setDestinationNetwork(srcNet);
+    };
 
     return (
         <div className="">
@@ -46,7 +67,7 @@ export default function Bridge() {
                 <div className="flex flex-col overflow-hidden border border-indigo-800 rounded-xl bg-indigo-950">
                     <div className="flex justify-between">
                         <div className="p-2 select-none">
-                            <div className="text-gray-400">From</div>
+                            <div className="text-gray-500">From</div>
                             <DropdownMenu
                                 onOpenChange={(e) => handleOpenChange(e)}
                             >
@@ -79,8 +100,13 @@ export default function Bridge() {
                         </div>
 
                         <div className="flex flex-col justify-between p-2 text-right">
-                            <div className="text-gray-400 ">Balance</div>
-                            <div>{balance}</div>
+                            <div className="text-gray-500 ">Balance</div>
+                            <div>
+                                {balance
+                                    .dividedBy(1e18)
+                                    .decimalPlaces(TOKEN_DISPLAY_PRECISION)
+                                    .toString()}
+                            </div>
                         </div>
                     </div>
                     <div className="flex justify-between border-t border-t-indigo-800">
@@ -115,47 +141,17 @@ export default function Bridge() {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
-                        <div className="flex flex-col w-full p-2 text-right ">
-                            <div className="text-[1.6rem] pb-1">
-                                {amountToBridge}
-                            </div>
-                            <div className="flex gap-x-1 text-[0.65rem] text-indigo-400 justify-end">
-                                <button
-                                    onClick={() =>
-                                        setAmountToBridge(balance * 0.25)
-                                    }
-                                    className="w-12 text-center border border-indigo-400 rounded-full"
-                                >
-                                    25%
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        setAmountToBridge(balance * 0.5)
-                                    }
-                                    className="w-12 text-center border border-indigo-400 rounded-full"
-                                >
-                                    50%
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        setAmountToBridge(balance * 0.75)
-                                    }
-                                    className="w-12 text-center border border-indigo-400 rounded-full"
-                                >
-                                    75%
-                                </button>
-                                <button
-                                    onClick={() => setAmountToBridge(balance)}
-                                    className="w-12 text-center border border-indigo-400 rounded-full"
-                                >
-                                    MAX
-                                </button>
-                            </div>
-                        </div>
+                        <AmountInput
+                            balance={balance}
+                            onChange={onAmountInputChange}
+                        />
                     </div>
                 </div>
 
-                <button className="flex m-auto bg-[#3a2793] rounded-sm w-[2.5rem] justify-center cursor-pointer mt-4">
+                <button
+                    onClick={() => reverseSwapTargets()}
+                    className="flex m-auto bg-[#3a2793] rounded-sm w-[2.5rem] justify-center cursor-pointer mt-4"
+                >
                     <ArrowDownIcon
                         height={30}
                         width={20}
@@ -170,7 +166,7 @@ export default function Bridge() {
 
                 <div className="flex justify-between mt-4 overflow-hidden border border-indigo-800 rounded-xl bg-indigo-950">
                     <div className="p-2 ">
-                        <div className="text-gray-400">To</div>
+                        <div className="text-gray-500">To</div>
                         <DropdownMenu onOpenChange={(e) => handleOpenChange(e)}>
                             <DropdownMenuTrigger className="flex items-center max-w-[140px] px-2 py-1 bg-indigo-700 rounded-lg w-[120px]">
                                 <div className="w-full">
@@ -201,14 +197,27 @@ export default function Bridge() {
                     </div>
 
                     <div className="flex flex-col justify-between p-2 text-right ">
-                        <div className="text-gray-400">Balance</div>
+                        <div className="text-gray-500">Balance</div>
                         <div>{destinationBalance}</div>
                     </div>
                 </div>
 
-                <button className="py-2 block m-auto mt-6 text-center bg-indigo-700 rounded-full max-w-[275px] w-full">
+                <button
+                    disabled={
+                        !amountToBridge ||
+                        amountToBridge.isZero() ||
+                        inputError !== undefined
+                    }
+                    className="py-2 block m-auto mt-6 text-center bg-indigo-700 rounded-full max-w-[275px] w-full"
+                >
                     Connect wallet to bridge
                 </button>
+
+                {amountToBridge && inputError && (
+                    <div className="pt-3 text-center text-red-500">
+                        {inputError}
+                    </div>
+                )}
             </div>
         </div>
     );

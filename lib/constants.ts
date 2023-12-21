@@ -1,0 +1,1 @@
+export const TOKEN_DISPLAY_PRECISION = 6;
