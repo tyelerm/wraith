@@ -48,7 +48,7 @@ export const AmountInput: FC<AmountInputProps> = ({
     const setTo = (fraction: number) => {
         if (balance.gt(0)) {
             setInputValue(formatTokenAmount(balance.times(fraction)));
-            processOnChangeCallback(balance);
+            processOnChangeCallback(balance.times(fraction));
         } else {
             setInputValue("");
             processOnChangeCallback();
