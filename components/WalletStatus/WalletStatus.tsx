@@ -4,6 +4,7 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 import { useEffect, useState } from "react";
 import {
     Connection,
+    Connector,
     useAccount,
     useAccountEffect,
     useBalance,
@@ -116,6 +117,24 @@ export const WalletStatus = () => {
         else setWalletIcon("");
     }, [connector]);
 
+    const getConnectorIcon = (connector: Connector) => {
+        if (connector.name === "WalletConnect") {
+            return <img src={walletConnectIcon.src} className="w-6 h-6" />;
+        } else if (connector.name === "Coinbase Wallet") {
+            return <img src={coinbaseWalletIcon.src} className="w-6 h-6" />;
+        } else {
+            return (
+                <ExtensionIcon
+                    style={{
+                        height: "24px",
+                        width: "24px",
+                    }}
+                    className="text-indigo-100 rounded-md"
+                />
+            );
+        }
+    };
+
     return (
         <>
             {(isConnected ||
@@ -218,7 +237,7 @@ export const WalletStatus = () => {
                                                     onClick={() => {
                                                         connect(connection);
                                                     }}
-                                                    className="flex items-center w-full gap-1 p-1 bg-indigo-900 rounded-sm flex-nowrap hover:text-white"
+                                                    className="flex items-center w-full p-1 bg-indigo-900 rounded-sm gap-x-2 flex-nowrap hover:text-white"
                                                 >
                                                     {connection.connector
                                                         .icon ? (
@@ -233,13 +252,11 @@ export const WalletStatus = () => {
                                                             />
                                                         </div>
                                                     ) : (
-                                                        <ExtensionIcon
-                                                            style={{
-                                                                height: "24px",
-                                                                width: "24px",
-                                                            }}
-                                                            className="text-indigo-100 rounded-md"
-                                                        />
+                                                        <>
+                                                            {getConnectorIcon(
+                                                                connection.connector
+                                                            )}
+                                                        </>
                                                     )}
                                                     <div className="flex font-mono text-[0.9rem] items-center leading-[1]">
                                                         {account.slice(0, 6)}...

@@ -12,7 +12,6 @@ import {
     useDisconnect,
     useSwitchChain,
 } from "wagmi";
-import { injected, walletConnect } from "wagmi/connectors";
 
 const shape =
     "rounded-xl flex flex-col p-6 max-h-screen overflow-y-scroll min-w-[300px] max-w-[400px] w-full";
@@ -143,6 +142,7 @@ export const WalletModal = () => {
                         .map((connector: any, index: Number) => {
                             return (
                                 <button
+                                    onClick={() => toggleWalletModal()}
                                     key={connector.name + ":" + connector.id}
                                 >
                                     <ConnectButton connector={connector} />
@@ -158,7 +158,10 @@ export const WalletModal = () => {
                         <button
                             className="w-full select-none bg-indigo-800 rounded-sm px-4 p-1 h-[48px] mb-3 max-w-[100%] items-center"
                             key={chain.id}
-                            onClick={() => switchChain({ chainId: chain.id })}
+                            onClick={() => {
+                                switchChain({ chainId: chain.id });
+                                toggleWalletModal();
+                            }}
                         >
                             {chain.name}
                         </button>
