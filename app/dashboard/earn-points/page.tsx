@@ -3,6 +3,10 @@ import PointTask from "./components/point-task";
 import { cn } from "@/lib/utils";
 import tasks from "./example-tasks.json";
 
+export const metadata = {
+    title: "Tasks",
+};
+
 export default function EarnPoints() {
     return (
         <div className="h-full contents">

@@ -14,7 +14,8 @@ import {
 } from "wagmi";
 import { injected, walletConnect } from "wagmi/connectors";
 
-const shape = "rounded-xl flex flex-col p-6 min-w-[300px] max-w-[400px] w-full";
+const shape =
+    "rounded-xl flex flex-col p-6 max-h-screen overflow-y-scroll min-w-[300px] max-w-[400px] w-full";
 const color = "border border-indigo-500 bgimg-radial-gradient-purple bg-black";
 const position =
     "absolute z-[50] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2";
@@ -162,26 +163,6 @@ export const WalletModal = () => {
                             {chain.name}
                         </button>
                     ))}
-                </div>
-
-                <div>Disconnect</div>
-
-                <div
-                    className={
-                        "px-4 p-1 gap-4 mb-5 max-w-[100%] items-center w-full overflow-hidden flex justify-between whitespace-nowrap flex-nowrap text-left select-none bg-indigo-800 rounded-sm"
-                    }
-                >
-                    Connected to:{" "}
-                    <div className="overflow-hidden font-mono text-ellipsis">
-                        {!!address &&
-                            address?.slice(0, 6) + "..." + address?.slice(-4)}
-                    </div>
-                    <div
-                        onClick={() => disconnect()}
-                        className="px-3 py-1 rounded-sm cursor-pointer bg-indigo-950"
-                    >
-                        Disconnect
-                    </div>
                 </div>
             </Dialog.Content>
         </Dialog.Root>

@@ -4,6 +4,10 @@ import UserTable from "./components/UserTable";
 import SearchUser from "./components/SearchUsers";
 import CreateUser from "./components/create/CreateUser";
 
+export const metadata = {
+    title: "Leaderboard",
+};
+
 export default function Users() {
     return (
         <>

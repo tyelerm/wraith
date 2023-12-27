@@ -1,0 +1,14 @@
+.DropdownMenuContent {
+    /* max-height: calc(
+        var(--radix-dropdown-menu-content-available-height) - 70px
+    ); */
+    max-height: min(
+        500px,
+        var(--radix-dropdown-menu-content-available-height) - 70px
+    );
+    box-shadow: 2px 6px 9px 2px #0000008c;
+    position: absolute;
+    right: 0px;
+    transform: translateX(calc(var(--radix-dropdown-menu-trigger-width) / 2));
+    min-width: var(--radix-dropdown-menu-trigger-width);
+}
