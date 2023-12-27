@@ -4,15 +4,19 @@ import { Jost } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-import WagmiProvider from "@/components/wagmi-provider";
 import SolanaWalletAdapterProvider from "@/components/solana-wallet-adapter-provider";
-import { WalletModal } from "@/components/walletModal/walletModal";
-import { SessionProvider } from "next-auth/react";
+import { WalletModal } from "@/components/WalletModal/WalletModal";
+import { WagmiProvider } from "wagmi";
+import { config } from "./wagmi-config";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NextAuthProvider } from "@/components/NextAuthProvider";
 
 const jost = Jost({
     subsets: ["latin"],
     weight: ["100", "300", "400", "500", "700", "900"],
 });
+
+const queryClient = new QueryClient();
 
 // export const metadata: Metadata = {
 //     metadataBase: new URL("https://daily-todo-task.vercel.app/"),
@@ -59,15 +63,17 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <SessionProvider>
-                        <WagmiProvider>
-                            <SolanaWalletAdapterProvider>
-                                <WalletModal />
-                                <main className="">{children}</main>
-                                <Toaster />
-                            </SolanaWalletAdapterProvider>
+                    <NextAuthProvider>
+                        <WagmiProvider config={config}>
+                            <QueryClientProvider client={queryClient}>
+                                <SolanaWalletAdapterProvider>
+                                    <WalletModal />
+                                    <main className="">{children}</main>
+                                    <Toaster />
+                                </SolanaWalletAdapterProvider>
+                            </QueryClientProvider>
                         </WagmiProvider>
-                    </SessionProvider>
+                    </NextAuthProvider>
                 </ThemeProvider>
             </body>
         </html>

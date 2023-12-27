@@ -1,5 +1,5 @@
 "use client";
-import { ConnectTwitter } from "@/components/connectTwitter/connectTwitter";
+import { ConnectTwitter } from "@/components/ConnectTwitter/ConnectTwitter";
 import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 
@@ -27,7 +27,7 @@ export default function Dashboard() {
     return (
         <div className="">
             <h1 className="text-3xl font-bold">Dashboard</h1>
-            <ConnectTwitter />
+            {/* <ConnectTwitter /> */}
         </div>
     );
 }

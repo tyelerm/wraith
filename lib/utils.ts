@@ -7,9 +7,16 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export const formatTokenAmount = (value: BigNumber): string => {
-    return value
-        .dividedBy(1e18)
-        .decimalPlaces(TOKEN_DISPLAY_PRECISION)
-        .toString();
+export const formatTokenAmount = (value: BigNumber | BigInt): string => {
+    if (typeof value === typeof BigNumber) {
+        return (value as BigNumber)
+            .dividedBy(1e18)
+            .decimalPlaces(TOKEN_DISPLAY_PRECISION)
+            .toLocaleString();
+    } else {
+        return new BigNumber(value.toString())
+            .dividedBy(1e18)
+            .decimalPlaces(TOKEN_DISPLAY_PRECISION)
+            .toLocaleString();
+    }
 };

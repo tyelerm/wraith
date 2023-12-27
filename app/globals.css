@@ -140,3 +140,19 @@ button:disabled {
     filter: contrast(0.5);
     cursor: not-allowed;
 }
+
+.bgimg-radial-gradient-purple {
+    background-image: radial-gradient(
+        76.33% 76.59% at 50.15% 6.06%,
+        #4a1088 0%,
+        rgba(33, 4, 59, 0.702) 100%
+    );
+}
+
+.bgimg-radial-gradient-indigo {
+    background-image: radial-gradient(
+        92% 81.55% at 50.15% 15%,
+        rgba(68, 3, 193, 1) 0%,
+        rgba(23, 9, 35, 1) 100%
+    );
+}

@@ -5,11 +5,17 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import {
+    Connector,
+    useAccount,
+    useConnect,
+    useDisconnect,
+    useSwitchChain,
+} from "wagmi";
+import { injected, walletConnect } from "wagmi/connectors";
 
-const shape = "rounded-xl flex flex-col p-6 min-w-[300px] max-w-[500px] w-full";
-const color =
-    "border border-indigo-500 bg-[radial-gradient(92%_81.55%_at_50%_15%,rgba(68,3,193,1)_0%,rgba(23,9,35,1)_100%)]";
+const shape = "rounded-xl flex flex-col p-6 min-w-[300px] max-w-[400px] w-full";
+const color = "border border-indigo-500 bgimg-radial-gradient-purple bg-black";
 const position =
     "absolute z-[50] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2";
 
@@ -33,39 +39,62 @@ export const WalletModal = () => {
     );
 
     // wagmi connection state
-    const { address: _address, isConnected, connector } = useAccount();
+    const { address: _address } = useAccount();
     const [address, setAddress] = useState(undefined as any);
     const { connectors } = useConnect();
     const { disconnect } = useDisconnect();
+    const { chains, switchChain } = useSwitchChain();
+
+    const [filteredConnectors, setFilteredConnectors] = useState(connectors);
 
     // solana wallet adapter state
-    const { connection } = useConnection();
-    const {
-        publicKey,
-        wallet,
-        wallets,
-        autoConnect,
-        connecting,
-        connected: solanaConnected,
-        disconnecting,
-    } = useWallet();
+    // const { connection } = useConnection();
+    // const {
+    //     publicKey,
+    //     wallet,
+    //     wallets,
+    //     autoConnect,
+    //     connecting,
+    //     connected: solanaConnected,
+    //     disconnecting,
+    // } = useWallet();
 
     useEffect(() => {
-        setAddress(_address);
-    }, [_address]);
+        console.log("Connectors:", connectors);
 
-    useEffect(() => {
-        console.log(connector);
-    }, [connector]);
+        // defualt connectors aka not injected - check wagmi config
+        let defaultConnectors = [] as any;
+        let injectedConnectors = [] as any;
 
-    useEffect(() => {
-        console.log("Solana Wallet State: ", {
-            wallet,
-            wallets,
-            autoConnect,
-            solanaConnected,
+        // separate installed injected connectors from app-provided default connectors
+        connectors.map((connector: Connector) => {
+            connector.type !== "injected"
+                ? defaultConnectors.push(connector)
+                : injectedConnectors.push(connector);
         });
-    }, [wallet, wallets, autoConnect, solanaConnected]);
+
+        // if injected connectors does not have a copy of a default connector
+        // then add the default connector
+        defaultConnectors.map((connector: Connector) => {
+            if (
+                !injectedConnectors.some(
+                    (ic: any) => ic.name === connector.name
+                )
+            )
+                injectedConnectors.push(connector);
+        });
+
+        setFilteredConnectors(injectedConnectors);
+    }, [connectors]);
+
+    // useEffect(() => {
+    //     console.log("Solana Wallet State: ", {
+    //         wallet,
+    //         wallets,
+    //         autoConnect,
+    //         solanaConnected,
+    //     });
+    // }, [wallet, wallets, autoConnect, solanaConnected]);
 
     return (
         <Dialog.Root open={show} onOpenChange={toggleWalletModal}>
@@ -81,7 +110,7 @@ export const WalletModal = () => {
                     Connect Wallet
                 </div>
 
-                <div>Solana</div>
+                {/* <div>Solana</div>
                 <div
                     className="flex flex-col mb-2"
                     onClick={() => toggleWalletModal()}
@@ -103,29 +132,43 @@ export const WalletModal = () => {
                             backgroundColor: "#545df8",
                         }}
                     />
-                </div>
+                </div> */}
 
-                <div>EVM, BSC, MATIC</div>
+                <div>Select Wallet</div>
 
                 <div className="flex flex-col gap-3 mb-5">
-                    {connectors.map((connector: any, index: Number) => {
-                        if (index === 1)
-                            connector.name =
-                                "MetaMask (but actually whichever extension injects first)";
-                        return (
-                            <div
-                                key={connector.name}
-                                onClick={() => toggleWalletModal()}
-                            >
-                                <ConnectButton connector={connector} />
-                            </div>
-                        );
-                    })}
+                    {filteredConnectors
+                        .toReversed()
+                        .map((connector: any, index: Number) => {
+                            return (
+                                <button
+                                    key={connector.name + ":" + connector.id}
+                                >
+                                    <ConnectButton connector={connector} />
+                                </button>
+                            );
+                        })}
                 </div>
+
+                <div>Select Network</div>
+
+                <div className="flex flex-col">
+                    {chains.map((chain: any) => (
+                        <button
+                            className="w-full select-none bg-indigo-800 rounded-sm px-4 p-1 h-[48px] mb-3 max-w-[100%] items-center"
+                            key={chain.id}
+                            onClick={() => switchChain({ chainId: chain.id })}
+                        >
+                            {chain.name}
+                        </button>
+                    ))}
+                </div>
+
+                <div>Disconnect</div>
 
                 <div
                     className={
-                        "px-4 p-1 gap-4 mb-5 max-w-[100%] items-center w-full overflow-hidden flex justify-between whitespace-nowrap flex-nowrap text-left select-none bg-[#545df8] rounded-md"
+                        "px-4 p-1 gap-4 mb-5 max-w-[100%] items-center w-full overflow-hidden flex justify-between whitespace-nowrap flex-nowrap text-left select-none bg-indigo-800 rounded-sm"
                     }
                 >
                     Connected to:{" "}
@@ -135,7 +178,7 @@ export const WalletModal = () => {
                     </div>
                     <div
                         onClick={() => disconnect()}
-                        className="px-3 py-1 bg-indigo-700 rounded-sm cursor-pointer"
+                        className="px-3 py-1 rounded-sm cursor-pointer bg-indigo-950"
                     >
                         Disconnect
                     </div>
@@ -145,18 +188,41 @@ export const WalletModal = () => {
     );
 };
 
+import walletConnectIcon from "/public/icons/wallet-connect-icon.png";
+import coinbaseWalletIcon from "/public/icons/coinbase-wallet-logo.png";
+import ExtensionIcon from "@mui/icons-material/Extension";
+
 export const ConnectButton = ({ connector }: { connector: any }) => {
-    const { connect } = useConnect({ connector });
-    const [name, setName] = useState("");
+    const { connect } = useConnect();
+    const [icon, setIcon] = useState("");
+
     useEffect(() => {
-        setName(connector.name);
+        // set icon that comes with connector
+        if (connector.icon) setIcon(connector.icon);
+        // or set icon based on connector name
+        else if (connector.name === "WalletConnect")
+            setIcon(walletConnectIcon.src);
+        else if (connector.name === "Coinbase Wallet")
+            setIcon(coinbaseWalletIcon.src);
+        // or set no icon if no matching names
+        else setIcon("");
     }, [connector]);
+
     return (
         <div
-            onClick={() => connect()}
-            className="bg-[#545df8] py-3 w-full text-center rounded-sm cursor-pointer"
+            onClick={() => connect({ connector })}
+            className="flex items-center justify-between w-full px-4 py-2 text-center bg-indigo-800 rounded-sm cursor-pointer"
         >
-            {name}
+            {connector.name}
+
+            {icon ? (
+                <img src={icon} className="rounded-md w-9 h-9" />
+            ) : (
+                <ExtensionIcon
+                    style={{ height: "36px", width: "36px" }}
+                    className="text-indigo-100 rounded-md"
+                />
+            )}
         </div>
     );
 };
