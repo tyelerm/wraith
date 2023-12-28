@@ -206,7 +206,7 @@ export const WalletStatus = () => {
                     <DropdownMenuContent
                         className={cn(
                             css.DropdownMenuContent,
-                            "p-1 mt-1 border-2 border-indigo-700 rounded-md select-none whitespace-nowrap overflow-hidden flex flex-col"
+                            "p-1 mt-1 border-2 bg-black border-indigo-700 rounded-md select-none whitespace-nowrap overflow-hidden flex flex-col"
                         )}
                     >
                         <button>
