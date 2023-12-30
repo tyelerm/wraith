@@ -1,9 +1,10 @@
-import { formatTokenAmount } from "@/lib/utils";
+import { balanceToBigNumber, formatTokenAmount } from "@/lib/utils";
 import BigNumber from "bignumber.js";
 import { ChangeEvent, FC, useEffect, useState } from "react";
+import { UseBalanceReturnType } from "wagmi";
 
 interface AmountInputProps {
-    balance: BigNumber;
+    balance: UseBalanceReturnType;
     onChange: (params: { amount?: BigNumber; error?: string }) => void;
     value?: BigNumber;
 }
@@ -18,7 +19,7 @@ export const AmountInput: FC<AmountInputProps> = ({
 
     const processOnChangeCallback = (amount?: BigNumber) => {
         if (amount) {
-            const error = amount.gt(balance)
+            const error = amount.gt(balanceToBigNumber(balance))
                 ? "Insufficient balance"
                 : undefined;
 
@@ -30,7 +31,7 @@ export const AmountInput: FC<AmountInputProps> = ({
 
     const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
-        const decimals = 18;
+        const decimals = balance.data?.decimals || 18;
         const regexToken = `^(?!0\\d|\\.)\\d*(?:\\.\\d{0,${decimals}})?$`;
         const INPUT_REGEX = new RegExp(regexToken);
         const isInputValid = INPUT_REGEX.test(value);
@@ -45,10 +46,11 @@ export const AmountInput: FC<AmountInputProps> = ({
         }
     };
 
-    const setTo = (fraction: number) => {
-        if (balance.gt(0)) {
-            setInputValue(formatTokenAmount(balance.times(fraction)));
-            processOnChangeCallback(balance.times(fraction));
+    const setTo = (ratio: number) => {
+        let _balance = balanceToBigNumber(balance);
+        if (_balance.gt(0)) {
+            setInputValue(formatTokenAmount(_balance.times(ratio)));
+            processOnChangeCallback(_balance.times(ratio));
         } else {
             setInputValue("");
             processOnChangeCallback();
@@ -63,12 +65,12 @@ export const AmountInput: FC<AmountInputProps> = ({
     }, [value]);
 
     return (
-        <div className="flex flex-col w-full p-2 text-right ">
+        <div className="flex flex-col p-2 text-right min-w-[180px] w-full">
             <input
                 onChange={onInputChange}
                 placeholder="0.00"
                 value={inputValue}
-                className="text-right bg-[unset] w-full text-[1.6rem] mb-1 outline-none"
+                className="text-right bg-[unset] text-[1.6rem] mb-1 outline-none w-inherit"
             />
             <div className="flex gap-x-1 text-[0.65rem] text-indigo-400 justify-end">
                 <button

@@ -7,11 +7,17 @@ import {
     polygonZkEvmTestnet,
     sepolia,
 } from "wagmi/chains";
-import { coinbaseWallet, walletConnect, metaMask } from "wagmi/connectors";
+import {
+    coinbaseWallet,
+    walletConnect,
+    injected,
+    metaMask,
+} from "wagmi/connectors";
 
 export const config = createConfig({
     chains: [mainnet, sepolia, bsc, polygon, polygonZkEvm, polygonZkEvmTestnet],
     connectors: [
+        // injected({ target: "metaMask" }),
         metaMask(),
         walletConnect({
             relayUrl: "wss://relay.walletconnect.org",

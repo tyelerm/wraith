@@ -1,1 +1,2 @@
 export const TOKEN_DISPLAY_PRECISION = 6;
+export const TOKEN_DECIMALS_DEFAULT = 18;

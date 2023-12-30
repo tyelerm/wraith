@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import tasks from "./example-tasks.json";
 
 export const metadata = {
-    title: "Tasks",
+    title: "Points",
 };
 
 export default function EarnPoints() {

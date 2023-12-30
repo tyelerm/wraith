@@ -1,33 +1,9 @@
-"use client";
-import { ConnectTwitter } from "@/components/ConnectTwitter/ConnectTwitter";
-import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import Dashboard from "./dashboard";
 
-export default function Dashboard() {
-    const { data: session } = useSession();
+export const metadata = {
+    title: "Dashboard",
+};
 
-    const test = async () => {
-        await fetch("/api/twitter/2/users/me");
-    };
-
-    const test2 = async () => {
-        let tweet = "This text will appear in your tweet";
-        await fetch("/api/twitter/2/tweets", {
-            method: "POST",
-            body: tweet,
-        });
-    };
-
-    useEffect(() => {
-        //@ts-ignore
-        if (!session || !session.token.access_token) return;
-        // test();
-    }, [session]);
-
-    return (
-        <div className="">
-            <h1 className="text-3xl font-bold">Dashboard</h1>
-            {/* <ConnectTwitter /> */}
-        </div>
-    );
+export default function DashboardPage() {
+    return <Dashboard />;
 }
