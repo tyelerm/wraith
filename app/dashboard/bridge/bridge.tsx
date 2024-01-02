@@ -6,18 +6,14 @@ import {
     DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import css from "./styles.module.css";
-import {
-    ArrowDownIcon,
-    ArrowUpIcon,
-    TriangleDownIcon,
-    TriangleRightIcon,
-} from "@radix-ui/react-icons";
+import { TriangleDownIcon, TriangleRightIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { cn, formatBalance } from "@/lib/utils";
 import { AmountInput } from "./amountInput/amountInput";
 import BigNumber from "bignumber.js";
 import { useAccount, useBalance } from "wagmi";
 import { useWalletModalStore } from "@/stores";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 
 const networks = ["Sepolia ETH", "Wraith Testnet"];
 const tokens = ["Token 1", "Token 2", "Token 3", "Token 4"];
@@ -35,8 +31,7 @@ export default function Bridge() {
         (state: any) => state.toggleWalletModal
     );
 
-    const { address, isConnected, connector, chainId, chain, status } =
-        useAccount();
+    const { address, isConnected, chainId } = useAccount();
 
     const balance = useBalance({
         address: address || undefined,
@@ -182,15 +177,9 @@ export default function Bridge() {
                         onClick={() => reverseSwapTargets()}
                         className="flex m-auto bg-[#3a2793] rounded-sm w-[2.5rem] justify-center cursor-pointer mt-4"
                     >
-                        <ArrowDownIcon
-                            height={30}
-                            width={20}
-                            className="mr-[-0.35rem] mt-[0.2rem]"
-                        />
-                        <ArrowUpIcon
-                            height={30}
-                            width={20}
-                            className="ml-[-0.35rem]"
+                        <SwapVertIcon
+                            style={{ height: "30px", width: "30px" }}
+                            className="text-indigo-200"
                         />
                     </button>
 

@@ -9,19 +9,29 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
+import { useAccount } from "wagmi";
+import { isAddress } from "viem";
 
+const PLACEHOLDER_ADDRESS = "0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 const networks = ["Wraith Testnet"];
 const tokens = ["ETH"];
 
 export default function Faucet() {
+    const [receiverAddress, setReceiverAddress] =
+        useState<any>(PLACEHOLDER_ADDRESS);
     const [selectedNetwork, setSelectedNetwork] = useState("");
     const [selectedToken, setSelectedToken] = useState("");
     const [isOpen, setIsOpen] = useState(false);
+    const { isConnected, address } = useAccount();
 
     useEffect(() => {
         setSelectedNetwork(networks[0]);
         setSelectedToken(tokens[0]);
     }, []);
+
+    useEffect(() => {
+        if (address) setReceiverAddress(address);
+    }, [address]);
 
     const selectStyle = (network: string) => {
         return (
@@ -34,10 +44,16 @@ export default function Faucet() {
         setIsOpen(open);
     };
 
+    async function pasteReceiverAddress() {
+        await navigator.clipboard
+            .readText()
+            .then((text) => setReceiverAddress(text));
+    }
+
     return (
         <div className="mr-2 md:mr-4">
             <h1 className="text-3xl font-bold">Faucet</h1>
-            <div className="p-6 min-w-[300px] max-w-[500px] bg-[radial-gradient(112%_89.55%_at_50%_15%,rgba(97,21,245,0.66)_0%,rgba(41,16,63,0.47)_100%)] w-full rounded-xl border border-indigo-500 mt-4 m-auto">
+            <div className="p-6 min-w-[300px] max-w-[500px] bgimg-radial-gradient-purple w-full rounded-xl border border-indigo-500 mt-4 m-auto">
                 <div className="text-[1.5rem] font-medium pb-2">Get Tokens</div>
                 <div className="text-[0.8rem] max-w-[20rem] text-gray-300 pb-10">
                     This faucet transfers ETH to a users address on Wraith's
@@ -91,15 +107,36 @@ export default function Faucet() {
                 <div>Wallet Address</div>
                 <div
                     tabIndex={0}
-                    className="flex justify-between p-3 mb-16 bg-indigo-700 rounded-md select-none flex-nowrap"
+                    className="flex justify-between p-3 mb-10 bg-indigo-700 rounded-md flex-nowrap"
                 >
-                    <div className="font-mono text-[#999999] overflow-hidden text-ellipsis">
-                        0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                    <div
+                        className={
+                            " font-mono overflow-hidden text-ellipsis " +
+                            (receiverAddress === PLACEHOLDER_ADDRESS
+                                ? " text-[#999999] "
+                                : " text-indigo-200 ")
+                        }
+                    >
+                        {receiverAddress}
                     </div>
-                    <div className="text-[#d3d1ff] cursor-pointer pl-4">
+                    <button
+                        onClick={() => pasteReceiverAddress()}
+                        className="text-[#d3d1ff] cursor-pointer pl-4"
+                    >
                         Paste
-                    </div>
+                    </button>
                 </div>
+
+                <button
+                    disabled={
+                        !isConnected ||
+                        receiverAddress === PLACEHOLDER_ADDRESS ||
+                        !isAddress(receiverAddress)
+                    }
+                    className="py-2 block m-auto text-center bg-indigo-700 rounded-full max-w-[275px] w-full"
+                >
+                    Dispense Tokens
+                </button>
             </div>
         </div>
     );
